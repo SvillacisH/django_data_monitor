@@ -32,6 +32,7 @@
                 </div>
                 <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
                     <div class="w-full">
+
                         {% if form.non_field_errors %}
 
                         <div id="password_error_div"
@@ -39,11 +40,13 @@
                             role="alert">Invalid username or password.</div>
 
                         {% endif %}
-
+                        
                         <!-- Método post y action para el URL (con el alias 'login') -->
                         <form method="post" action="{% url 'login' %}">
+
                             <!-- CSRF token -->
                             {% csrf_token %}
+
                             <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
                                 Login
                             </h1>
