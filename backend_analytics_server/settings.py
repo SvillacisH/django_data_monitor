@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-0i(fe%&-&r+im6v$whc2$5-chsh$n9y=7q3w2&uj=0b!3p1sge
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*",]
 
 
 # Application definition
@@ -121,3 +121,15 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, STATIC_URL)]
 
 API_URL = 'https://cimontes.pythonanywhere.com/landing/api/index/'
+
+CSRF_TRUSTED_ORIGINS = [
+  "https://*.app.github.dev", # Solo si utiliza Codespaces
+  "https://localhost:8000",
+  "http://127.0.0.1:8000"
+]
+
+# Fallo: acceso sin autenticación
+LOGIN_URL = '/login/'
+
+# Éxito: luego de autenticación exitosa
+LOGIN_REDIRECT_URL = '/'
