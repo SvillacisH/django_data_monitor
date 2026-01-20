@@ -6,6 +6,7 @@ import pymysql
 pymysql.version_info = (2, 2, 1, "final", 0)
 pymysql.install_as_MySQLdb()
 
+# BASE_DIR definido como Path pero usado con os.path para compatibilidad total
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SEGURIDAD: DEBUG debe ser False en producción
@@ -28,7 +29,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # OBLIGATORIO: Justo después de SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Debe ir después de SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -74,20 +75,23 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# --- CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS ---
+# --- CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS CORREGIDA ---
 STATIC_URL = "static/"
 
-# Donde Django busca los archivos en desarrollo
+# Donde Django busca los archivos en desarrollo (carpeta raíz /static)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
-# Donde se recopilan para producción (Railway leerá de aquí)
+
+# Donde se recopilan para producción (Carpeta /assets)
+# Usamos os.path.join para evitar el Warning de 'No directory at /app/assets/'
 STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
-# Almacenamiento con WhiteNoise (Permite servir CSS/JS sin servidor externo)
+# Almacenamiento optimizado pero menos estricto (mejor para debugging en Railway)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-# Configuración de Seguridad
+# --- FIN CONFIGURACIÓN ESTÁTICOS ---
+
 CSRF_TRUSTED_ORIGINS = [
     "https://*.up.railway.app",
     "https://*.app.github.dev"
