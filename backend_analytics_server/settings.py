@@ -98,9 +98,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Almacenamiento optimizado con WhiteNoise
-# Nota: Si el despliegue falla por errores de 'manifest', cambia a:
-# 'whitenoise.storage.CompressedStaticFilesStorage'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # --- FIN CONFIGURACIÓN ESTÁTICOS ---
 
