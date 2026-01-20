@@ -78,13 +78,14 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 # Donde Django busca los archivos en desarrollo
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 # Donde se recopilan para producción (Railway leerá de aquí)
-STATIC_ROOT = BASE_DIR / 'assets'
+STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
 # Almacenamiento con WhiteNoise (Permite servir CSS/JS sin servidor externo)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Configuración de Seguridad
 CSRF_TRUSTED_ORIGINS = [
