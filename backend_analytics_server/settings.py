@@ -91,10 +91,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # --- FIN CONFIGURACIÓN ESTÁTICOS ---
+API_URL = 'https://cimontes.pythonanywhere.com/landing/api/index/'
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.up.railway.app",
-    "https://*.app.github.dev"
+    "https://*.app.github.dev",
+    "https://localhost:8000",
+    "http://127.0.0.1:8000"
 ]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
