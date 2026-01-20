@@ -2,22 +2,20 @@ from pathlib import Path
 import os
 import pymysql
 
-# Configuración de MySQL para entornos que no tienen mysqlclient nativo
+# Configuración obligatoria para MySQL en producción
 pymysql.version_info = (2, 2, 1, "final", 0)
 pymysql.install_as_MySQLdb()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-0i(fe%&-&r+im6v$whc2$5-chsh$n9y=7q3w2&uj=0b!3p1sge")
-
-# SECURITY WARNING: don't run with debug turned on in production!
+# SEGURIDAD: DEBUG debe ser False en producción
 DEBUG = False
 
+# Dominios permitidos de Railway
 ALLOWED_HOSTS = ['.up.railway.app', 'localhost', '127.0.0.1']
 
-# Application definition
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-tu-clave-aqui")
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -30,7 +28,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # Debe ir justo debajo de SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # OBLIGATORIO: Justo después de SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -58,9 +56,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend_analytics_server.wsgi.application"
 
-# Database - Configurada para las variables de entorno de Railway
+# Base de Datos usando variables de entorno de Railway
 DATABASES = {
-    "default": {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ.get('MYSQLDATABASE'),
         'USER': os.environ.get('MYSQLUSER'),
@@ -70,48 +68,30 @@ DATABASES = {
     }
 }
 
-# Password validation
-AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-]
-
-# Internationalization
+# Internacionalización
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# --- CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS (CORREGIDA) ---
-
-# URL pública para acceder a los archivos
+# --- CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS ---
 STATIC_URL = "static/"
 
-# Donde Django BUSCA los archivos en desarrollo (tu carpeta raíz 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+# Donde Django busca los archivos en desarrollo
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-# Donde collectstatic COPIARÁ los archivos para producción
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Donde se recopilan para producción (Railway leerá de aquí)
+STATIC_ROOT = BASE_DIR / 'assets'
 
-# Almacenamiento optimizado con WhiteNoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# Almacenamiento con WhiteNoise (Permite servir CSS/JS sin servidor externo)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# --- FIN CONFIGURACIÓN ESTÁTICOS ---
-
-API_URL = 'https://cimontes.pythonanywhere.com/landing/api/index/'
-
+# Configuración de Seguridad
 CSRF_TRUSTED_ORIGINS = [
-  "https://*.up.railway.app",
-  "https://*.app.github.dev",
-  "https://localhost:8000",
-  "http://127.0.0.1:8000"
+    "https://*.up.railway.app",
+    "https://*.app.github.dev"
 ]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
